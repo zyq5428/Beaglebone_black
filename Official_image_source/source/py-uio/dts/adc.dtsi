@@ -1,0 +1,7 @@
+// ADC / touchscreen controller
+
+&tscadc {
+        status = "okay";
+        compatible = "uio";
+        symlink = "uio/adc";
+};

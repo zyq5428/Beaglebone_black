@@ -1,0 +1,30 @@
+#include "subarctic/pinctrl.h"
+#include "bone/pins.h"
+#include "irq.h"
+
+// Example for making a gpio-triggered irq available via uio.  The specific
+// gpio used in this example is P9.12 but it should be easy to change that.
+//
+// Note that you can achieve a similar thing using the sysfs gpio interface.
+
+&am33xx_pinmux {
+	gpio_irq_pin: gpio-irq {
+		pinctrl-single,pins = <
+			PIN_GPIN_PULLUP( P9_12 )  // gpio 1.28
+		>;
+	};
+};
+
+/ {
+	// no idea what a proper place would be to put it
+	gpio-irq {
+		compatible = "uio";
+		symlink = "uio/gpio-irq";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpio_irq_pin>;
+
+		interrupt-parent = <&gpio1>;
+		interrupts = <28 IRQ_TYPE_EDGE_FALLING>;
+	};
+};
